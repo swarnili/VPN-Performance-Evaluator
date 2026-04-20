@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VPN Simulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">VPN<span class="accent">Sim</span></span>
+      <span class="logo-sub">// Privacy-Enhancing Network Evaluator</span>
+    </div>
+    <div class="header-right">
+      <span id="clock" class="clock mono"></span>
+     
+    </div>
+  </header>
+
+  <main>
+
+    <!-- INPUT PANEL -->
+    <section class="panel" id="input-panel">
+      <h2 class="panel-title">Configure Test</h2>
+
+      <div class="field-group">
+        <label>// mode_select</label>
+        <div class="btn-group" id="mode-group">
+          <button class="tog active" data-val="Both">BOTH</button>
+          <button class="tog" data-val="Normal">NORMAL</button>
+          <button class="tog" data-val="VPN">VPN</button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>// data_size</label>
+        <div class="btn-group" id="size-group">
+          <button class="tog" data-val="5">5 MB</button>
+          <button class="tog active" data-val="10">10 MB</button>
+          <button class="tog" data-val="50">50 MB</button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>// num_runs [ <span id="runs-val" class="orange mono">5</span> ]</label>
+        <input type="range" id="runs-slider" min="1" max="10" value="5" />
+      </div>
+
+      <button id="run-btn" class="run-btn">
+        <span id="btn-text">[ RUN TEST ]</span>
+        <span id="btn-spin" class="spinner hidden"></span>
+      </button>
+
+      <div class="observations">
+        <h3>// observations</h3>
+        <ul>
+          <li>VPN introduces per-chunk latency overhead</li>
+          <li>Throughput decreases under simulated privacy routing</li>
+          <li>Smaller chunks amplify total transfer time</li>
+          <li>Performance tradeoff: privacy vs. speed</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESULTS PANEL -->
+    <section class="panel" id="results-panel">
+      <h2 class="panel-title">Results Output</h2>
+
+      <div id="summary-cards" class="stat-cards hidden">
+        <div class="scard">
+          <div class="sc-label">Normal Avg</div>
+          <div class="sc-val green" id="c-normal-avg">—</div>
+          <div class="sc-unit">MB/s</div>
+        </div>
+        <div class="scard">
+          <div class="sc-label">VPN Avg</div>
+          <div class="sc-val orange" id="c-vpn-avg">—</div>
+          <div class="sc-unit">MB/s</div>
+        </div>
+        <div class="scard">
+          <div class="sc-label">Slowdown</div>
+          <div class="sc-val red" id="c-slowdown">—</div>
+          <div class="sc-unit">%</div>
+        </div>
+      </div>
+
+      <div id="stats-row" class="stats-row hidden">
+        <div class="stats-box">
+          <h4 class="green">// normal_mode</h4>
+          <p>min  <span id="n-min">—</span> MB/s</p>
+          <p>max  <span id="n-max">—</span> MB/s</p>
+          <p>avg  <span id="n-avg">—</span> MB/s</p>
+        </div>
+        <div class="stats-box">
+          <h4 class="orange">// vpn_mode</h4>
+          <p>min  <span id="v-min">—</span> MB/s</p>
+          <p>max  <span id="v-max">—</span> MB/s</p>
+          <p>avg  <span id="v-avg">—</span> MB/s</p>
+        </div>
+      </div>
+
+      <div id="table-wrap" class="table-wrap hidden">
+        <table>
+          <thead>
+            <tr>
+              <th>Run</th><th>Mode</th><th>Size (MB)</th>
+              <th>Time (s)</th><th>Speed (MB/s)</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+
+      <div class="warning-box" style="margin-top:12px">
+        <span class="w-icon">!</span>
+        LOCALHOST SPEEDS ARE ARTIFICIALLY HIGH. Real-world networks introduce propagation delay, packet loss &amp; congestion.
+      </div>
+    </section>
+
+    <!-- CHARTS PANEL -->
+    <section class="panel wide" id="chart-panel">
+      <h2 class="panel-title">Visualisation</h2>
+      <div class="charts-row">
+        <div class="chart-box">
+          <h3>// speed_vs_runs [ line_chart ]</h3>
+          <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chart-box">
+          <h3>// avg_comparison [ bar_chart ]</h3>
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>&nbsp; VPN SIMULATION &nbsp;|&nbsp; PERFORMANCE EVALUATION OF PRIVACY-ENHANCING NETWORKS</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
